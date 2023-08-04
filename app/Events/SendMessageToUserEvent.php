@@ -5,7 +5,7 @@ namespace App\Events;
 use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -34,9 +34,9 @@ class SendMessageToUserEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        Log::debug("{$this->user->name}: broadcast: {$this->message}");
         return [
-            new PresenceChannel('chat'),
+            /* public channel new PresenceChannel('chat'). chat.user id is user receiver message */
+            new PrivateChannel('chat.' . $this->user->id),
         ];
     }
 }

@@ -120,8 +120,13 @@
             sendButton.addEventListener('click', function () {
                 let message = filedMessage.value;
                 filedMessage.value = '';
+                @php
+                    $userId = 2;
+                    if(auth()->id() == 2)
+                        $userId = 1;
+                @endphp
                 $.ajax({
-                    url: '{{ route('chat.send', 1) }}',
+                    url: '{{ route('chat.send', $userId) }}',
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -133,18 +138,25 @@
                     }
                 })
             })
-            Echo.join('chat')
-                .here((users) => {
-                    users.forEach((user, index) => {
-                        console.log('Here user: ', user)
-                    });
-                })
-                .joining((user) => {
-                    console.log('user joined', user)
-                })
-                .leaving((user) => {
-                    console.log('user leaving', user)
-                })
+            // chat broadcast to all channels
+            // Echo.join('chat')
+            //     .here((users) => {
+            //         users.forEach((user, index) => {
+            //             console.log('Here user: ', user)
+            //         });
+            //     })
+            //     .joining((user) => {
+            //         console.log('user joined', user)
+            //     })
+            //     .leaving((user) => {
+            //         console.log('user leaving', user)
+            //     })
+            //     .listen('SendMessageToUserEvent', (e) => {
+            //         console.log('user chat', e)
+            //     });
+
+            // chat broadcast to private event channel
+            Echo.private('chat.{{auth()->id()}}')
                 .listen('SendMessageToUserEvent', (e) => {
                     console.log('user chat', e)
                 });
