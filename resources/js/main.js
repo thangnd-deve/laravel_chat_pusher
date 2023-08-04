@@ -1,4 +1,0 @@
-function getDataEventListener(channelName, eventName) {
-
-
-}
