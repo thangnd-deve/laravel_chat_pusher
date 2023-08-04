@@ -146,7 +146,7 @@
                     console.log('user leaving', user)
                 })
                 .listen('SendMessageToUserEvent', (e) => {
-                    console.log('user leaving', e)
+                    console.log('user chat', e)
                 });
         })
     </script>
